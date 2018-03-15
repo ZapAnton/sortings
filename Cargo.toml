@@ -1,0 +1,6 @@
+[package]
+name = "sortings"
+version = "0.1.0"
+authors = ["ZapAnton"]
+
+[dependencies]
