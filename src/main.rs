@@ -12,6 +12,26 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
+fn selection_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
+    for i in 0..array.len() {
+        let mut minimum_index = i;
+
+        for j in (i + 1)..array.len() {
+            if comparison_closure(array[j], array[minimum_index]) {
+                minimum_index = j;
+            }
+        }
+
+        if i != minimum_index {
+            let temp = array[minimum_index];
+
+            array[minimum_index] = array[i];
+
+            array[i] = temp;
+        }
+    }
+}
+
 fn get_user_input() -> String {
     use std::io::{stdin, stdout, Write};
 
@@ -84,7 +104,7 @@ fn main() {
 
     let comparison_closure = choose_comparison_closure();
 
-    bubble_sort(&mut initial_vec, &comparison_closure);
+    selection_sort(&mut initial_vec, &comparison_closure);
 
     println!("Sorted items: {:?}", initial_vec);
 }
