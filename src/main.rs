@@ -12,10 +12,8 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
-fn get_user_items_count() -> i32 {
+fn get_user_input() -> String {
     use std::io::{stdin, stdout, Write};
-
-    print!("Enter the count of sorted items: ");
 
     let _ = stdout().flush();
 
@@ -25,7 +23,13 @@ fn get_user_items_count() -> i32 {
         .read_line(&mut input_string)
         .expect("Wrong string entered!");
 
-    let input_string = input_string.trim();
+    input_string.trim().to_string()
+}
+
+fn get_user_items_count() -> i32 {
+    print!("Enter the count of sorted items: ");
+
+    let input_string = get_user_input();
 
     match input_string.parse() {
         Ok(items_count) => return items_count,
@@ -45,8 +49,6 @@ fn generate_random_vector(items_count: i32) -> Vec<i32> {
 }
 
 fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
-    use std::io::{stdin, stdout, Write};
-
     print!(
         "\nChoose comparison method:\n\
          1. > (Greater than)\n\
@@ -55,15 +57,9 @@ fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
          4. <= (Less than or equals)\n> "
     );
 
-    let _ = stdout().flush();
+    let input_string = get_user_input();
 
-    let mut input_string = String::new();
-
-    stdin()
-        .read_line(&mut input_string)
-        .expect("Wrong string entered!");
-
-    let chosen_option: i32 = input_string.trim().parse().unwrap();
+    let chosen_option: i32 = input_string.parse().unwrap();
 
     match chosen_option {
         1 => Box::new(|x, y| x > y),
