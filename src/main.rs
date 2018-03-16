@@ -12,6 +12,23 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
+//TODO Fix index bug
+fn insertion_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
+    for i in 1..array.len() {
+        let key = array[i];
+
+        let mut j = i - 1;
+
+        while j >= 0 && comparison_closure(key, array[j]) {
+            array[j + 1] = array[j];
+
+            j -= 1;
+        }
+
+        array[j + 1] = key;
+    }
+}
+
 fn selection_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
     for i in 0..array.len() {
         let mut minimum_index = i;
@@ -104,7 +121,7 @@ fn main() {
 
     let comparison_closure = choose_comparison_closure();
 
-    selection_sort(&mut initial_vec, &comparison_closure);
+    insertion_sort(&mut initial_vec, &comparison_closure);
 
     println!("Sorted items: {:?}", initial_vec);
 }
