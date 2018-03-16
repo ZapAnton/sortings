@@ -39,18 +39,22 @@ fn get_user_items_count() -> i32 {
     };
 }
 
-fn main() {
+fn generate_random_vector(items_count: i32) -> Vec<i32> {
     use rand::Rng;
 
+    (0..items_count)
+        .map(|_| rand::thread_rng().gen_range(-1000, 1001))
+        .collect()
+}
+
+fn main() {
     let items_count = get_user_items_count();
 
     if items_count <= 0 {
         return;
     }
 
-    let mut initial_vec: Vec<i32> = (0..items_count)
-        .map(|_| rand::thread_rng().gen_range(-1000, 1001))
-        .collect();
+    let mut initial_vec = generate_random_vector(items_count);
 
     let greater_closure = |x, y| x > y;
 
