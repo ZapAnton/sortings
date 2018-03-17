@@ -18,7 +18,7 @@ fn insertion_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bo
 
         let mut j = i;
 
-        while j > 0 && key < array[j - 1] {
+        while j > 0 && comparison_closure(key, array[j - 1]) {
             array[j] = array[j - 1];
 
             j -= 1;
