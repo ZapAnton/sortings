@@ -12,6 +12,26 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
+fn partition(array: &mut [i32], low: usize, high:usize) -> usize {
+    1
+}
+
+fn quick_sort_p(array: &mut [i32], low: usize, high: usize) {
+    if low < high {
+        let partition_index = partition(array, low, high);
+        
+        quick_sort_p(array, low, partition_index - 1); 
+
+        quick_sort_p(array, partition_index + 1, high); 
+    }
+}
+
+fn quick_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
+    let n = array.len();
+
+    quick_sort_p(array, 0, n);
+}
+
 fn insertion_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
     for i in 1..array.len() {
         let key = array[i];
