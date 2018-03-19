@@ -12,24 +12,38 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
-fn partition(array: &mut [i32], low: usize, high:usize) -> usize {
-    1
-}
+fn partition(array: &mut [i32]) -> usize {
+    let len = array.len();
 
-fn quick_sort_p(array: &mut [i32], low: usize, high: usize) {
-    if low < high {
-        let partition_index = partition(array, low, high);
-        
-        quick_sort_p(array, low, partition_index - 1); 
+    let pivot_index = len / 2;
 
-        quick_sort_p(array, partition_index + 1, high); 
+    array.swap(pivot_index, len - 1);
+
+    let mut store_index = 0;
+
+    for i in 0..len -1 {
+        if array[i] <= array[len - 1] {
+            array.swap(i, store_index);
+
+            store_index += 1;
+        }
     }
+
+    array.swap(store_index, len - 1);
+
+    store_index
 }
 
 fn quick_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
-    let n = array.len();
+    let len = array.len();
 
-    quick_sort_p(array, 0, n);
+    if len >= 2 {
+        let pivot_index = partition(array);
+
+        quick_sort(&mut array[0..pivot_index], comparison_closure);
+
+        quick_sort(&mut array[pivot_index + 1..len], comparison_closure);
+    }
 }
 
 fn insertion_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) {
@@ -140,7 +154,7 @@ fn main() {
 
     let comparison_closure = choose_comparison_closure();
 
-    insertion_sort(&mut initial_vec, &comparison_closure);
+    quick_sort(&mut initial_vec, &comparison_closure);
 
     println!("Sorted items: {:?}", initial_vec);
 }
