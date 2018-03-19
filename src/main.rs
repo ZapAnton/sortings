@@ -4,10 +4,8 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     for i in 0..array.len() {
         for j in i..array.len() {
             if comparison_closure(array[i], array[j]) {
-                let temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-            }
+                array.swap(i, j);
+           }
         }
     }
 }
@@ -73,12 +71,8 @@ fn selection_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bo
         }
 
         if i != minimum_index {
-            let temp = array[minimum_index];
-
-            array[minimum_index] = array[i];
-
-            array[i] = temp;
-        }
+            array.swap(minimum_index, i);
+       }
     }
 }
 
