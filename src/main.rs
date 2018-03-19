@@ -12,7 +12,7 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
     }
 }
 
-fn partition(array: &mut [i32]) -> usize {
+fn partition(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>) -> usize {
     let len = array.len();
 
     let pivot_index = len / 2;
@@ -21,8 +21,8 @@ fn partition(array: &mut [i32]) -> usize {
 
     let mut store_index = 0;
 
-    for i in 0..len -1 {
-        if array[i] <= array[len - 1] {
+    for i in 0..len - 1 {
+        if comparison_closure(array[i], array[len - 1]) {
             array.swap(i, store_index);
 
             store_index += 1;
@@ -38,7 +38,7 @@ fn quick_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>)
     let len = array.len();
 
     if len >= 2 {
-        let pivot_index = partition(array);
+        let pivot_index = partition(array, comparison_closure);
 
         quick_sort(&mut array[0..pivot_index], comparison_closure);
 
