@@ -5,7 +5,7 @@ fn bubble_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bool>
         for j in i..array.len() {
             if comparison_closure(array[i], array[j]) {
                 array.swap(i, j);
-           }
+            }
         }
     }
 }
@@ -72,36 +72,28 @@ fn selection_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -> bo
 
         if i != minimum_index {
             array.swap(minimum_index, i);
-       }
+        }
     }
 }
 
-fn get_user_input() -> String {
+fn get_user_input() -> Result<String, std::io::Error> {
     use std::io::{stdin, stdout, Write};
 
     let _ = stdout().flush();
 
     let mut input_string = String::new();
 
-    stdin()
-        .read_line(&mut input_string)
-        .expect("Wrong string entered!");
+    stdin().read_line(&mut input_string)?;
 
-    input_string.trim().to_string()
+    Ok(input_string.trim().to_string())
 }
 
-fn get_user_items_count() -> i32 {
+fn get_user_items_count() -> Result<i32, std::num::ParseIntError> {
     print!("Enter the count of sorted items: ");
 
-    let input_string = get_user_input();
+    let user_input = get_user_input().expect("Error getting user input!");
 
-    match input_string.parse() {
-        Ok(items_count) => return items_count,
-        Err(_) => {
-            println!("You must enter a number!");
-            return -1;
-        }
-    };
+    user_input.parse::<i32>()
 }
 
 fn generate_random_vector(items_count: i32) -> Vec<i32> {
@@ -121,9 +113,11 @@ fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
          4. <= (Less than or equals)\n> "
     );
 
-    let input_string = get_user_input();
+    let input_string = get_user_input().expect("Error reading user input!");
 
-    let chosen_option: i32 = input_string.parse().unwrap();
+    let chosen_option: i32 = input_string
+        .parse()
+        .expect("You must enter the option number!");
 
     match chosen_option {
         1 => Box::new(|x, y| x > y),
@@ -138,11 +132,8 @@ fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
 }
 
 fn main() {
-    let items_count = get_user_items_count();
-
-    if items_count <= 0 {
-        return;
-    }
+    let items_count =
+        get_user_items_count().expect("You must enter a valid integer for items count!");
 
     let mut initial_vec = generate_random_vector(items_count);
 
