@@ -16,7 +16,7 @@ fn get_user_input() -> Result<String, std::io::Error> {
     Ok(input_string.trim().to_string())
 }
 
-pub fn get_user_input_int(input_message: &str) -> Result<i32, std::num::ParseIntError> {
+fn get_user_input_int(input_message: &str) -> Result<i32, std::num::ParseIntError> {
     print!("{}: ", input_message);
 
     let user_input = get_user_input().expect("Error getting user input!");
@@ -24,8 +24,11 @@ pub fn get_user_input_int(input_message: &str) -> Result<i32, std::num::ParseInt
     user_input.parse::<i32>()
 }
 
-pub fn generate_random_vector(items_count: i32) -> Vec<i32> {
+pub fn generate_random_vector() -> Vec<i32> {
     use self::rand::Rng;
+
+    let items_count = get_user_input_int("Enter sorting items count")
+        .expect("You must enter a valid integer for items count!");
 
     (0..items_count)
         .map(|_| rand::thread_rng().gen_range(-1000, 1001))
