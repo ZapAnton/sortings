@@ -88,8 +88,8 @@ fn get_user_input() -> Result<String, std::io::Error> {
     Ok(input_string.trim().to_string())
 }
 
-fn get_user_items_count() -> Result<i32, std::num::ParseIntError> {
-    print!("Enter the count of sorted items: ");
+fn get_user_input_int(input_message: &str) -> Result<i32, std::num::ParseIntError> {
+    print!("{}: ", input_message);
 
     let user_input = get_user_input().expect("Error getting user input!");
 
@@ -110,14 +110,10 @@ fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
          1. > (Greater than)\n\
          2. < (Less than)\n\
          3. >= (Greater than or equals)\n\
-         4. <= (Less than or equals)\n> "
+         4. <= (Less than or equals)\n"
     );
 
-    let input_string = get_user_input().expect("Error reading user input!");
-
-    let chosen_option: i32 = input_string
-        .parse()
-        .expect("You must enter the option number!");
+    let chosen_option = get_user_input_int("").expect("You must enter a comparison method number!");
 
     match chosen_option {
         1 => Box::new(|x, y| x > y),
@@ -131,15 +127,40 @@ fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
     }
 }
 
+fn choose_sorting_method() -> fn(&mut [i32], &Box<Fn(i32, i32) -> bool>) -> () {
+    print!(
+        "\nChoose sorting method:\n\
+         1. Bubble sort\n\
+         2. Insertion sort\n\
+         3. Quicksort\n\
+         4. Selection sort\n"
+    );
+
+    let chosen_option = get_user_input_int("").expect("You must enter a sorting method number!");
+
+    match chosen_option {
+        1 => bubble_sort,
+        2 => insertion_sort,
+        3 => quick_sort,
+        4 => selection_sort,
+        _ => {
+            println!("Wrong option. Choosing default method: quicksort");
+            quick_sort
+        }
+    }
+}
+
 fn main() {
-    let items_count =
-        get_user_items_count().expect("You must enter a valid integer for items count!");
+    let items_count = get_user_input_int("Enter sorting items count")
+        .expect("You must enter a valid integer for items count!");
 
     let mut initial_vec = generate_random_vector(items_count);
 
     let comparison_closure = choose_comparison_closure();
 
-    quick_sort(&mut initial_vec, &comparison_closure);
+    let sorting_method = choose_sorting_method();
+
+    sorting_method(&mut initial_vec, &comparison_closure);
 
     println!("Sorted items: {:?}", initial_vec);
 }
