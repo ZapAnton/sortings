@@ -3,7 +3,7 @@
 ## TODO
 
 ~~- Implement more sorting algorithms~~
-- Add error management for string parsing and user input
+~~- Add error management for string parsing and user input~~
 - Make user choose sorting algorithm
 - Split main.rs into separate files
 - Add tests
