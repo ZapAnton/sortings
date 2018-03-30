@@ -73,3 +73,27 @@ pub fn selection_sort(array: &mut [i32], comparison_closure: &Box<Fn(i32, i32) -
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    fn test_closure<F>(closure: F) -> bool
+    where
+        F: Fn(i32, i32) -> bool,
+    {
+        closure(4, 6)
+    }
+
+    #[test]
+    fn selection_sort_test() {
+        let mut test_array = [3, 1, 2, 6, 5, 4];
+
+        let comparison_closure = |x, y| x < y;
+
+        assert!(test_closure(&comparison_closure));
+        assert!(test_closure(&comparison_closure));
+    }
+
+}
