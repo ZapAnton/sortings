@@ -96,21 +96,27 @@ mod tests {
 
     use super::*;
 
-    fn test_closure<F>(closure: F) -> bool
-    where
-        F: Fn(i32, i32) -> bool,
-    {
-        closure(4, 6)
-    }
-
     #[test]
     fn selection_sort_test() {
-        let mut test_array = [3, 1, 2, 6, 5, 4];
+        let mut test_vec = vec![3, 1, 2, 6, 5, 4];
 
-        let comparison_closure = |x, y| x < y;
+        let expected_vec_greater = vec![1, 2, 3, 4, 5, 6];
 
-        assert!(test_closure(&comparison_closure));
-        assert!(test_closure(&comparison_closure));
+        let expected_vec_less = vec![6, 5, 4, 3, 2, 1];
+
+        let compare_less = Box::new(|x, y| x > y) as Box<Fn(i32, i32) -> bool>;
+
+        let compare_greater = Box::new(|x, y| x < y) as Box<Fn(i32, i32) -> bool>;
+
+        let sorter = SelectionSorter;
+
+        sorter.sort(&mut test_vec, &compare_less);
+
+        assert_eq!(&test_vec, &expected_vec_less);
+
+        sorter.sort(&mut test_vec, &compare_greater);
+
+        assert_eq!(&test_vec, &expected_vec_greater);
     }
 
 }
