@@ -2,7 +2,7 @@ extern crate rand;
 
 use std;
 
-use sort::{bubble_sort, insertion_sort, quick_sort, selection_sort};
+use sort::*;
 
 fn get_user_input() -> Result<String, std::io::Error> {
     use std::io::{stdin, stdout, Write};
@@ -58,7 +58,7 @@ pub fn choose_comparison_closure() -> Box<Fn(i32, i32) -> bool> {
     }
 }
 
-pub fn choose_sorting_method() -> fn(&mut [i32], &Box<Fn(i32, i32) -> bool>) -> () {
+pub fn choose_sorting_method() -> Box<SortSlice> {
     print!(
         "\nChoose sorting method:\n\
          1. Bubble sort\n\
@@ -70,13 +70,13 @@ pub fn choose_sorting_method() -> fn(&mut [i32], &Box<Fn(i32, i32) -> bool>) -> 
     let chosen_option = get_user_input_int("").expect("You must enter a sorting method number!");
 
     match chosen_option {
-        1 => bubble_sort,
-        2 => insertion_sort,
-        3 => quick_sort,
-        4 => selection_sort,
+        1 => Box::new(BubbleSorter) as Box<SortSlice>,
+        2 => Box::new(InsertSorter) as Box<SortSlice>,
+        3 => Box::new(QuickSorter) as Box<SortSlice>,
+        4 => Box::new(SelectionSorter) as Box<SortSlice>,
         _ => {
             println!("Wrong option. Choosing default method: quicksort");
-            quick_sort
+            Box::new(QuickSorter) as Box<SortSlice>
         }
     }
 }
