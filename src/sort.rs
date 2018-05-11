@@ -11,7 +11,7 @@ impl SortSlice for BubbleSorter {
     fn sort(&self, slice: &mut [i32], compare: &Box<Fn(i32, i32) -> bool>) {
         for i in 0..slice.len() {
             for j in i..slice.len() {
-                if compare(slice[i], slice[j]) {
+                if compare(slice[j], slice[i]) {
                     slice.swap(i, j);
                 }
             }
@@ -94,7 +94,11 @@ impl SortSlice for QuickSorter {
 #[cfg(test)]
 mod tests {
 
+    extern crate rand;
+
     use super::*;
+
+    use self::rand::Rng;
 
     #[test]
     fn selection_sort_test() {
@@ -117,6 +121,34 @@ mod tests {
         sorter.sort(&mut test_vec, &compare_greater);
 
         assert_eq!(&test_vec, &expected_vec_greater);
+    }
+
+    #[test]
+    fn general_test() {
+        let test_vec = (0..10)
+            .map(|_| rand::thread_rng().gen_range(-1000, 1001))
+            .collect::<Vec<i32>>();
+
+        let sorters: Vec<Box<SortSlice>> = vec![
+            Box::new(BubbleSorter),
+            Box::new(SelectionSorter),
+            Box::new(QuickSorter),
+            Box::new(InsertSorter),
+        ];
+
+        let compare: Box<Fn(i32, i32) -> bool> = Box::new(|x, y| x < y);
+
+        for sorter in &sorters {
+            let mut test_vec_for_sorter = test_vec.clone();
+
+            let mut test_vec_for_std = test_vec.clone();
+
+            sorter.sort(&mut test_vec_for_sorter, &compare);
+
+            test_vec_for_std.sort();
+
+            assert_eq!(test_vec_for_sorter, test_vec_for_std);
+        }
     }
 
 }
