@@ -2,7 +2,7 @@ extern crate rand;
 
 use std;
 
-use sort::*;
+use sort::{BubbleSorter, InsertSorter, QuickSorter, SelectionSorter, SortSlice};
 
 fn get_user_input() -> Result<String, std::io::Error> {
     use std::io::{stdin, stdout, Write};
